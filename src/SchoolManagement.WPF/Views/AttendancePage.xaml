@@ -1,0 +1,42 @@
+<UserControl x:Class="SchoolManagement.WPF.Views.AttendancePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="حاضری شاگردان" FontSize="24" FontWeight="Bold" Margin="0,0,0,16"/>
+
+        <DockPanel Grid.Row="1" Margin="0,0,0,10">
+            <Button DockPanel.Dock="Right" Content="بارگذاری" Padding="12,6" Click="LoadButton_Click"/>
+            <TextBlock Text="تاریخ:" VerticalAlignment="Center" Margin="16,0,6,0"/>
+            <DatePicker DockPanel.Dock="Right" x:Name="DatePicker" Width="140"/>
+            <TextBlock Text="صنف:" VerticalAlignment="Center" Margin="16,0,6,0"/>
+            <ComboBox x:Name="ClassCombo" Width="200" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+        </DockPanel>
+
+        <DataGrid Grid.Row="2" x:Name="AttendanceGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+                  Background="White" SelectionMode="Extended" SelectionUnit="FullRow">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="نام شاگرد" Binding="{Binding StudentName}" Width="250" IsReadOnly="True"/>
+                <DataGridTextColumn Header="وضعیت" Binding="{Binding StatusDisplay}" Width="120" IsReadOnly="True"/>
+                <DataGridTextColumn Header="یادداشت" Binding="{Binding Note, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="3" Text="ابتدا یک یا چند شاگرد را در جدول انتخاب کنید (با Ctrl یا Shift)، سپس یکی از دکمه‌های زیر را بزنید:" Margin="0,10,0,6" Opacity="0.7" FontSize="12"/>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
+            <Button Content="✔ حاضر" Padding="16,8" Margin="0,0,8,0" Click="MarkPresent_Click"/>
+            <Button Content="✘ غایب" Padding="16,8" Margin="0,0,8,0" Click="MarkAbsent_Click"/>
+            <Button Content="⏰ تأخیر" Padding="16,8" Margin="0,0,8,0" Click="MarkLate_Click"/>
+            <Button Content="📝 رخصت" Padding="16,8" Margin="0,0,20,0" Click="MarkExcused_Click"/>
+            <Button x:Name="SaveButton" Content="💾 ذخیره حاضری" Padding="16,8" Click="SaveButton_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

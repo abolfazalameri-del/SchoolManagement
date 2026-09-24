@@ -1,0 +1,25 @@
+<UserControl x:Class="SchoolManagement.WPF.Views.ClassesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="صنوف" FontSize="24" FontWeight="Bold" Margin="0,0,0,16"/>
+
+        <Button Grid.Row="1" HorizontalAlignment="Left" Content="➕ ایجاد صنف جدید" Padding="12,6" Margin="0,0,0,10" Click="AddButton_Click"/>
+
+        <DataGrid Grid.Row="2" x:Name="ClassesGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Background="White">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="نام صنف" Binding="{Binding Name}" Width="180"/>
+                <DataGridTextColumn Header="سال تعلیمی" Binding="{Binding AcademicYear}" Width="100"/>
+                <DataGridTextColumn Header="ظرفیت" Binding="{Binding Capacity}" Width="80"/>
+                <DataGridTextColumn Header="تعداد شاگرد فعلی" Binding="{Binding EnrolledCount}" Width="120"/>
+                <DataGridTextColumn Header="استاد صنف" Binding="{Binding HomeroomTeacherName}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

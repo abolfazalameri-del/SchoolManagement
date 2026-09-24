@@ -1,0 +1,27 @@
+<Window x:Class="SchoolManagement.WPF.Dialogs.AddClassDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ایجاد صنف جدید" Height="440" Width="380"
+        FlowDirection="RightToLeft" FontFamily="Segoe UI" FontSize="14"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <StackPanel Margin="20">
+        <TextBlock Text="نام صنف (مثلاً: صنف ششم - الف)"/>
+        <TextBox x:Name="NameBox" Height="30" Margin="0,4,0,12"/>
+
+        <TextBlock Text="مقطع (عدد، مثلاً ۶)"/>
+        <TextBox x:Name="GradeLevelBox" Height="30" Margin="0,4,0,12"/>
+
+        <TextBlock Text="شعبه (مثلاً: الف)"/>
+        <TextBox x:Name="SectionBox" Height="30" Margin="0,4,0,12"/>
+
+        <TextBlock Text="سال تعلیمی"/>
+        <TextBox x:Name="AcademicYearBox" Height="30" Margin="0,4,0,12"/>
+
+        <TextBlock Text="ظرفیت"/>
+        <TextBox x:Name="CapacityBox" Height="30" Margin="0,4,0,12" Text="40"/>
+
+        <TextBlock x:Name="ErrorText" Foreground="Red" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,0,10"/>
+
+        <Button x:Name="SaveButton" Content="ایجاد صنف" Height="36" Click="SaveButton_Click"/>
+    </StackPanel>
+</Window>

@@ -1,0 +1,38 @@
+<Window x:Class="SchoolManagement.WPF.Dialogs.AddStudentDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="افزودن شاگرد جدید" Height="480" Width="420"
+        FlowDirection="RightToLeft" FontFamily="Segoe UI" FontSize="14"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <ScrollViewer Margin="20">
+        <StackPanel>
+            <TextBlock Text="شماره شاگرد"/>
+            <TextBox x:Name="StudentNumberBox" Height="30" Margin="0,4,0,12"/>
+
+            <TextBlock Text="نام کامل"/>
+            <TextBox x:Name="FullNameBox" Height="30" Margin="0,4,0,12"/>
+
+            <TextBlock Text="نام پدر"/>
+            <TextBox x:Name="FatherNameBox" Height="30" Margin="0,4,0,12"/>
+
+            <TextBlock Text="جنسیت"/>
+            <ComboBox x:Name="GenderCombo" Height="30" Margin="0,4,0,12">
+                <ComboBoxItem Content="ذکور" Tag="Male" IsSelected="True"/>
+                <ComboBoxItem Content="اناث" Tag="Female"/>
+            </ComboBox>
+
+            <TextBlock Text="تاریخ تولد"/>
+            <DatePicker x:Name="DateOfBirthPicker" Height="30" Margin="0,4,0,12"/>
+
+            <TextBlock Text="صنف"/>
+            <ComboBox x:Name="ClassCombo" Height="30" Margin="0,4,0,12" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+
+            <TextBlock Text="آدرس"/>
+            <TextBox x:Name="AddressBox" Height="30" Margin="0,4,0,12"/>
+
+            <TextBlock x:Name="ErrorText" Foreground="Red" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,0,10"/>
+
+            <Button x:Name="SaveButton" Content="ذخیره" Height="36" Click="SaveButton_Click"/>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

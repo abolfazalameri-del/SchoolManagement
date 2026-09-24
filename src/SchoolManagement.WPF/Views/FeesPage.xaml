@@ -1,0 +1,29 @@
+<UserControl x:Class="SchoolManagement.WPF.Views.FeesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="فیس و بدهکاران" FontSize="24" FontWeight="Bold" Margin="0,0,0,16"/>
+
+        <DockPanel Grid.Row="1" Margin="0,0,0,10">
+            <Button DockPanel.Dock="Right" Content="🔄 تازه‌سازی" Padding="12,6" Click="RefreshButton_Click"/>
+            <Button DockPanel.Dock="Right" Content="💵 ثبت پرداخت برای انتخاب‌شده" Padding="12,6" Margin="0,0,8,0" Click="RecordPaymentButton_Click"/>
+        </DockPanel>
+
+        <DataGrid Grid.Row="2" x:Name="DebtorsGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Background="White">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="نام شاگرد" Binding="{Binding StudentName}" Width="220"/>
+                <DataGridTextColumn Header="صنف" Binding="{Binding SchoolClassName}" Width="150"/>
+                <DataGridTextColumn Header="مجموع فیس" Binding="{Binding TotalDue, StringFormat=N0}" Width="120"/>
+                <DataGridTextColumn Header="پرداخت‌شده" Binding="{Binding TotalPaid, StringFormat=N0}" Width="120"/>
+                <DataGridTextColumn Header="باقی‌مانده" Binding="{Binding Balance, StringFormat=N0}" Width="120"/>
+                <DataGridTextColumn Header="فاکتور معوقه" Binding="{Binding OverdueInvoiceCount}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
