@@ -1,0 +1,98 @@
+name: Build Windows App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore SchoolManagement.sln
+
+      - name: Build (Release)
+        run: dotnet build SchoolManagement.sln --configuration Release --no-restore
+
+      # Phase 3.6: real automated tests run here with the real .NET SDK, which this project's
+      # authoring environment (a Linux sandbox with no SDK) never had. If this step goes red,
+      # the whole workflow fails and nothing below it runs — a failing test must block publish.
+      - name: Run automated tests
+        run: dotnet test SchoolManagement.sln --configuration Release --no-build --verbosity normal
+
+      - name: Publish WPF app (self-contained, single folder)
+        run: >
+          dotnet publish src/SchoolManagement.WPF/SchoolManagement.WPF.csproj
+          --configuration Release
+          --runtime win-x64
+          --self-contained true
+          -p:PublishSingleFile=false
+          --output publish/SchoolManagement
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SchoolManagement-win-x64
+          path: publish/SchoolManagement
+          retention-days: 30
+
+  # Separate, manually-triggered job: generates real EF Core migration files using the actual
+  # .NET SDK + EF tool (neither exists in the sandbox this project was authored in), then commits
+  # them back to the repo. Deliberately NOT run automatically on every push — migration generation
+  # should be a reviewed, deliberate act, not a side effect of an unrelated commit. Run it once
+  # from the Actions tab (workflow_dispatch) after reviewing this file, then review the generated
+  # migration before merging.
+  generate-ef-migration:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    needs: build-and-test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install dotnet-ef tool
+        run: dotnet tool install --global dotnet-ef --version 8.*
+
+      - name: Restore
+        run: dotnet restore SchoolManagement.sln
+
+      - name: Generate InitialCreate migration (only if none exists yet)
+        run: >
+          if (-not (Test-Path "src/SchoolManagement.Infrastructure/Migrations")) {
+            dotnet ef migrations add InitialCreate `
+              --project src/SchoolManagement.Infrastructure/SchoolManagement.Infrastructure.csproj `
+              --startup-project src/SchoolManagement.WPF/SchoolManagement.WPF.csproj `
+              --output-dir Migrations
+          } else {
+            Write-Host "Migrations folder already exists — skipping, remove it manually first if you want to regenerate."
+          }
+        shell: pwsh
+
+      - name: Commit generated migration back to the repo
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add src/SchoolManagement.Infrastructure/Migrations
+          git diff --cached --quiet && echo "Nothing to commit." || git commit -m "chore: generate EF Core InitialCreate migration (Phase 3.6, CI-generated)"
+          git push
